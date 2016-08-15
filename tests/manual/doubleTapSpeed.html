@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <link rel="stylesheet" href="assets/style.css">
+    <title>Hammer.js</title>
+</head>
+<body>
+<div id="container">
+    <div id="tap-counter" class="counter">taps: 0</div>
+    <div id="double-tap-counter" class="counter">double-taps: 0</div>
+</div>
+<script src="../../hammer.js"></script>
+<script>
+
+    var containerElement = document.getElementById('container');
+    var tapCounterElement = document.getElementById('tap-counter');
+    var doubleTapCounterElement = document.getElementById('double-tap-counter');
+
+    var hammertime = new Hammer.Manager(containerElement);
+    hammertime.add(new Hammer.Tap({event: 'doubletap', taps: 2}));
+    hammertime.add(new Hammer.Tap({event: 'singletap'}));
+    hammertime.get('singletap').requireFailure('doubletap');
+    hammertime.on("doubletap", onDoubleTap);
+    hammertime.on("singletap", onSingleTap);
+
+    var tapCount = 0;
+    function onSingleTap() {
+        tapCount++;
+        tapCounterElement.innerHTML = 'taps: ' + tapCount;
+    }
+
+    var doubleTapCount = 0;
+    function onDoubleTap() {
+        doubleTapCount++;
+        doubleTapCounterElement.innerHTML = 'double-taps: ' + doubleTapCount;
+    }
+
+</script>
+<style>
+    #container {
+        background-color: grey;
+        height: 500px;
+    }
+
+    .counter{
+        width: 200px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    #tap-counter {
+        background-color: tomato;
+    }
+
+    #double-tap-counter {
+        background-color: lightBlue;
+    }
+</style>
+</body>
+</html>
